@@ -10,8 +10,8 @@ import com.birdyteam.vk_intership_audio_player.controller.ChooseFolderActivity
 
 class Track(context: Context,file : DocumentFile) {
 
-    var artist : String
-    var name : String
+    var artist : String?
+    var name : String?
     var albumImage : Bitmap? = null
     var duration : Long = 0
     var uri = file.uri
@@ -32,6 +32,5 @@ class Track(context: Context,file : DocumentFile) {
                 )
             }
         }
-        Log.d(ChooseFolderActivity.TAG, name)
     }
 }

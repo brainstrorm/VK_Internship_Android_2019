@@ -97,12 +97,14 @@ class MiniPlayer : Fragment() {
     private fun updateInfoOnView() {
         try {
             track = TrackSingleton.getInstance().getCurrentTrack()
-
             if(track.albumImage != null)
                 albumImage.setImageBitmap(track.albumImage)
             else
                 albumImage.setImageResource(R.drawable.unknown_album)
-            trackName.text = track.name
+            if(track.name == null)
+                trackName.text = getString(R.string.undefined)
+            else
+                trackName.text = track.name
             trackName.isSelected = true
 
             duration.text = getString(R.string.time_pattern,
