@@ -1,4 +1,4 @@
-# VK_Internship_Android_2018
+# VK Internship Android 2018
 ## Simple Audio Player, which is able to play music from Android device
 Functional:
 
