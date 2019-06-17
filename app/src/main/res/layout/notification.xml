@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+    <ImageView
+            android:contentDescription="@string/undefined"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/NotifAlbumImage"
+            android:src="@drawable/unknown_album"
+            android:layout_marginStart="8dp"/>
+    <LinearLayout
+            android:layout_marginStart="8dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:singleLine="true"
+                android:id="@+id/NotifArtist"
+                android:text="@string/undefined"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textIsSelectable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <requestFocus/>
+        </TextView>
+        <TextView
+                android:singleLine="true"
+                android:id="@+id/NotifTrackName"
+                android:text="@string/undefined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <requestFocus/>
+        </TextView>
+    </LinearLayout>
+</LinearLayout>
