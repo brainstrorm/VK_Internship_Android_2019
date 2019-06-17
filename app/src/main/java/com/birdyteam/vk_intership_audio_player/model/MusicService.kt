@@ -5,9 +5,11 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.birdyteam.vk_intership_audio_player.R
 import com.birdyteam.vk_intership_audio_player.controller.ChooseFolderActivity
@@ -69,19 +71,56 @@ class MusicService : Service() {
         startForeground(NOTIFICATION_ID, notification)
     }
 
-    private fun createNotification() = try {
-        val track = trackSingleton.getCurrentTrack()
-        NotificationCompat.Builder(this, ChooseFolderActivity.CHANNEL_ID)
+    private fun createNotification() : Notification {
+        val builder = NotificationCompat.Builder(this, ChooseFolderActivity.CHANNEL_ID)
+        val remoteViews = RemoteViews(packageName, R.layout.notification)
+        val track = try {
+            trackSingleton.getCurrentTrack()
+        } catch (e : java.lang.Exception) {
+            null
+        }
+        val mask = createBitMask(track)
+        when (val image = getImageFromMask(mask, track)) {
+            is Int -> remoteViews.setImageViewResource(R.id.NotifAlbumImage, image)
+            is Bitmap -> remoteViews.setImageViewBitmap(R.id.NotifAlbumImage, image)
+        }
+
+        val names = getTextFromMask(mask, track)
+        remoteViews.setTextViewText(R.id.NotifArtist, names.first)
+        remoteViews.setTextViewText(R.id.NotifTrackName, names.second)
+
+        return builder.setContent(remoteViews)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentText(track.name)
-            .setContentTitle(track.artist)
             .build()
-    } catch (e : Exception) {
-        NotificationCompat.Builder(this, ChooseFolderActivity.CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentText(getString(R.string.undefined))
-            .setContentTitle(getString(R.string.undefined))
-            .build()
+    }
+
+    private fun getTextFromMask(mask: Int, track: Track?): Pair<String, String> {
+        val artist =
+            if (mask and 0b010 == 0b010)
+                track!!.artist!!
+            else
+                getString(R.string.undefined)
+        val name =
+            if (mask and 0b001 == 0b001)
+                track!!.name!!
+            else
+                getString(R.string.undefined)
+        return Pair(artist, name)
+    }
+
+    private fun getImageFromMask(mask: Int, track: Track?): Any {
+        if (mask and 0b100 == 0b100)
+            return track!!.albumImage!!
+        return R.drawable.unknown_album
+    }
+
+    private fun createBitMask(track: Track?): Int {
+        var mask = 0b000
+        track ?: return mask
+        mask = mask or (0b100 and if(track.albumImage != null) 0b100 else 0)
+        mask = mask or (0b010 and if(track.artist != null) 0b010 else 0)
+        mask = mask or (0b001 and if(track.name != null) 1 else 0)
+        return mask
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
