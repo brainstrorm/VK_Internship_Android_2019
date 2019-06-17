@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VK_Intership_Audio_Player</string>
+    <string name="where_from">Откуда играть музыку?</string>
+    <string name="choose_folder_text">Выберите папку с аудиозаписями</string>
+    <string name="choose_folder_btn">Выбрать папку</string>
+    <string name="undefined">Неизвестный</string>
+    <string name="default_time">-0:00</string>
+    <string name="time_pattern">-%1$d:%2$d%3$d</string>
+</resources>
