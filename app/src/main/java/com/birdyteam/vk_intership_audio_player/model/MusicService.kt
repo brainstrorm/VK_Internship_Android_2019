@@ -38,6 +38,7 @@ class MusicService : Service() {
         private const val PLAY = "play"
         private const val STOP = "stop"
         private const val NEXT = "next"
+        private const val PREV = "prev"
         private const val CLEAR = "clear.player"
         private const val UPDATE_NOTIFICATION = "update.notification"
 
@@ -59,14 +60,14 @@ class MusicService : Service() {
                 Command.NEXT -> {
                     mIntent.putExtra(COMMAND, NEXT)
                 }
+                Command.PREV -> {
+                    mIntent.putExtra(COMMAND, PREV)
+                }
                 Command.CLEAR -> {
                     mIntent.putExtra(COMMAND, CLEAR)
                 }
                 Command.UPDATE_NOTIFICATION -> {
                     mIntent.putExtra(COMMAND, UPDATE_NOTIFICATION)
-                }
-                else -> {
-                    Log.d(ChooseFolderActivity.TAG, "Didn't fetch")
                 }
             }
             return mIntent
@@ -131,6 +132,13 @@ class MusicService : Service() {
             0
         ))
 
+        remoteViews.setOnClickPendingIntent(R.id.NotifPrevTrack, PendingIntent.getService(
+            this,
+            REQUEST_PENDING_INTENT_PREV,
+            getInstance(this, Command.PREV),
+            0
+        ))
+
         return remoteViews
     }
 
@@ -175,6 +183,9 @@ class MusicService : Service() {
             }
             NEXT -> {
                 nextTrack(mediaPlayer?.isPlaying)
+            }
+            PREV -> {
+                prevTrack(mediaPlayer?.isPlaying)
             }
             CLEAR -> {
                 clearPlayer()
@@ -237,11 +248,17 @@ class MusicService : Service() {
         Log.d(ChooseFolderActivity.TAG, "Music stopped")
     }
 
-    private fun sendSwapBroadCast(extra : String) {
-        val mIntent = Intent(SWAP_IMAGE)
-        mIntent.putExtra(SWAP_IMAGE, extra)
-        sendBroadcast(mIntent)
-        Log.d(ChooseFolderActivity.TAG, "Broadcast sent with extra = $extra")
+    private fun prevTrack(startPlay : Boolean?) {
+        mediaPlayer ?: return
+        if(mediaPlayer?.currentPosition!! < 5000) {
+            createPlayer(trackSingleton.prevTrack())
+            sendBroadcast(Intent(UPDATE_INFO))
+        } else {
+            mediaPlayer?.seekTo(0)
+        }
+        if(startPlay == true && mediaPlayer?.isPlaying == false)
+            mediaPlayer?.start()
+        updateNotification()
     }
 
     private fun nextTrack(startPlay : Boolean?) {
@@ -251,6 +268,13 @@ class MusicService : Service() {
         if(startPlay == true)
             mediaPlayer?.start()
         updateNotification()
+    }
+
+    private fun sendSwapBroadCast(extra : String) {
+        val mIntent = Intent(SWAP_IMAGE)
+        mIntent.putExtra(SWAP_IMAGE, extra)
+        sendBroadcast(mIntent)
+        Log.d(ChooseFolderActivity.TAG, "Broadcast sent with extra = $extra")
     }
 
     private fun createPlayer(track : Track) {
