@@ -1,42 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
-
-    <ImageView
-            android:contentDescription="@string/undefined"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/NotifAlbumImage"
-            android:src="@drawable/unknown_album"
-            android:layout_marginStart="8dp"/>
+        android:layout_height="wrap_content">
     <LinearLayout
-            android:layout_marginStart="8dp"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <TextView
-                android:singleLine="true"
-                android:id="@+id/NotifArtist"
-                android:text="@string/undefined"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textIsSelectable="true"
+        <ImageView
+                android:contentDescription="@string/undefined"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="4dp"
+                android:id="@+id/NotifAlbumImage"
+                android:src="@drawable/unknown_album"
+                android:layout_marginStart="8dp"/>
+        <LinearLayout
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <requestFocus/>
-        </TextView>
-        <TextView
-                android:singleLine="true"
-                android:id="@+id/NotifTrackName"
-                android:text="@string/undefined"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <requestFocus/>
-        </TextView>
+            <TextView
+                    android:singleLine="true"
+                    android:id="@+id/NotifArtist"
+                    android:text="@string/undefined"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textIsSelectable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:singleLine="true"
+                    android:id="@+id/NotifTrackName"
+                    android:text="@string/undefined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageButton
+                android:id="@+id/NotifPrevTrack"
+                android:layout_weight="1"
+                android:src="@drawable/ic_mini_player_next_28"
+                android:rotation="180"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        <ImageButton
+                android:id="@+id/NotifPlayStop"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:src="@android:drawable/ic_media_play"
+                android:tint="@color/mainDark"
+                android:background="@null"
+                android:layout_height="wrap_content"/>
+        <ImageButton
+                android:id="@+id/NotifNextTrack"
+                android:layout_weight="1"
+                android:src="@drawable/ic_mini_player_next_28"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
