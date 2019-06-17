@@ -89,6 +89,7 @@ class MusicService : Service() {
 
         return builder.setCustomBigContentView(remoteViews)
             .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .build()
     }
 
