@@ -1,6 +1,7 @@
 package com.birdyteam.vk_intership_audio_player.controller
 
 import android.app.Activity
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -60,6 +61,8 @@ class ChooseFolderActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        channel.setSound(null, null)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }

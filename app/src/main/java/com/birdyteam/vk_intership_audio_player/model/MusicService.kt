@@ -2,6 +2,7 @@ package com.birdyteam.vk_intership_audio_player.model
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -20,6 +21,10 @@ class MusicService : Service() {
     private var notificationManager : NotificationManager? = null
 
     companion object {
+
+        private const val REQUEST_PENDING_INTENT_PLAY_OR_STOP = 0
+        private const val REQUEST_PENDING_INTENT_NEXT = 1
+        private const val REQUEST_PENDING_INTENT_PREV = 2
 
         private var mediaPlayer : MediaPlayer? = null
 
@@ -42,11 +47,14 @@ class MusicService : Service() {
             val mIntent = Intent(context, MusicService::class.java)
             when (command) {
                 Command.PLAY_OR_STOP -> {
-                    if(mediaPlayer == null || mediaPlayer?.isPlaying == false)
+                    if(mediaPlayer == null || mediaPlayer?.isPlaying == false) {
+                        Log.d(ChooseFolderActivity.TAG, "Play command sent")
                         mIntent.putExtra(COMMAND, PLAY)
-                    else
+                    }
+                    else {
+                        Log.d(ChooseFolderActivity.TAG, "Stop command sent")
                         mIntent.putExtra(COMMAND, STOP)
-                    Log.d(ChooseFolderActivity.TAG, "Play or Stop command sent")
+                    }
                 }
                 Command.NEXT -> {
                     mIntent.putExtra(COMMAND, NEXT)
@@ -73,7 +81,19 @@ class MusicService : Service() {
 
     private fun createNotification() : Notification {
         val builder = NotificationCompat.Builder(this, ChooseFolderActivity.CHANNEL_ID)
+
+        val remoteViews = createAndFillRemoteViews()
+
+        Log.d(ChooseFolderActivity.TAG, "MusicService \\createNotification\\ --- function calles")
+
+        return builder.setCustomBigContentView(remoteViews)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .build()
+    }
+
+    private fun createAndFillRemoteViews(): RemoteViews {
         val remoteViews = RemoteViews(packageName, R.layout.notification)
+
         val track = try {
             trackSingleton.getCurrentTrack()
         } catch (e : java.lang.Exception) {
@@ -89,9 +109,29 @@ class MusicService : Service() {
         remoteViews.setTextViewText(R.id.NotifArtist, names.first)
         remoteViews.setTextViewText(R.id.NotifTrackName, names.second)
 
-        return builder.setContent(remoteViews)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .build()
+        val playOrStopIntent = getInstance(this, Command.PLAY_OR_STOP)
+
+        remoteViews.setImageViewResource(R.id.NotifPlayStop,
+            if(playOrStopIntent.getStringExtra(COMMAND) == PLAY)
+                android.R.drawable.ic_media_play
+            else
+                R.drawable.ic_pause_28
+        )
+        remoteViews.setOnClickPendingIntent(R.id.NotifPlayStop, PendingIntent.getService(
+            this,
+            REQUEST_PENDING_INTENT_PLAY_OR_STOP,
+            getInstance(this, Command.PLAY_OR_STOP),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        ))
+
+        remoteViews.setOnClickPendingIntent(R.id.NotifNextTrack, PendingIntent.getService(
+            this,
+            REQUEST_PENDING_INTENT_NEXT,
+            getInstance(this, Command.NEXT),
+            0
+        ))
+
+        return remoteViews
     }
 
     private fun getTextFromMask(mask: Int, track: Track?): Pair<String, String> {
@@ -192,6 +232,7 @@ class MusicService : Service() {
         mediaPlayer?.pause()
         if(mediaPlayer?.isPlaying == false) {
             sendSwapBroadCast(TO_PLAY)
+            updateNotification()
         }
         Log.d(ChooseFolderActivity.TAG, "Music stopped")
     }
