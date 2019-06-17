@@ -104,6 +104,17 @@ class ChooseFolderActivity : AppCompatActivity() {
         }
     }
 
+    fun swapFragments() {
+        val fm = supportFragmentManager
+        when (val fragment = fm.findFragmentById(R.id.FragmentContainer)) {
+            is MiniPlayer -> {
+                fm.beginTransaction()
+                    .remove(fragment)
+                    .commit()
+            }
+        }
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_PERMISSION) {
             if(grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_DENIED) {

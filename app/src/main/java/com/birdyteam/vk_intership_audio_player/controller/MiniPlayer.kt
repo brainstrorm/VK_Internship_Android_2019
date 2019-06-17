@@ -90,6 +90,10 @@ class MiniPlayer : Fragment() {
         activity?.registerReceiver(receiverForSwapPause, IntentFilter(MusicService.SWAP_IMAGE))
         activity?.registerReceiver(receiverForUpdateInfo, IntentFilter(MusicService.UPDATE_INFO))
 
+        mView.setOnClickListener {
+            (activity as? ChooseFolderActivity)?.swapFragments()
+        }
+
         updateInfoOnView()
         return mView
     }
