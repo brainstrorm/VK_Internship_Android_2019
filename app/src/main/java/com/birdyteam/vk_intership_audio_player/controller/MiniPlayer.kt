@@ -68,9 +68,7 @@ class MiniPlayer : Fragment() {
             activity?.startService(MusicService.getInstance(activity!!, Command.PLAY_OR_STOP))
         }
 
-        if (savedInstanceState != null) {
-            isPlaying = savedInstanceState.getBoolean(SAVE_PLAYING, false)
-        }
+        isPlaying = savedInstanceState?.getBoolean(SAVE_PLAYING, false) ?: TrackSingleton.getInstance().getCurrentTrack().isPlayingNow
         if (isPlaying)
             playBtn.setImageResource(R.drawable.ic_pause_28)
 

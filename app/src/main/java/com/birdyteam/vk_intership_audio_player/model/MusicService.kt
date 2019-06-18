@@ -225,12 +225,14 @@ class MusicService : Service() {
 
     private fun playMusic() {
         try {
+            val track = trackSingleton.getCurrentTrack()
             if(mediaPlayer == null) {
-                createPlayer(trackSingleton.getCurrentTrack())
+                createPlayer(track)
             }
             mediaPlayer?.start()
             if(mediaPlayer?.isPlaying == true) {
                 sendSwapBroadCast(TO_PAUSE)
+                track.isPlayingNow = true
             }
             updateNotification()
             Log.d(ChooseFolderActivity.TAG, "Music has being started")
@@ -244,6 +246,7 @@ class MusicService : Service() {
         mediaPlayer?.pause()
         if(mediaPlayer?.isPlaying == false) {
             sendSwapBroadCast(TO_PLAY)
+            trackSingleton.getCurrentTrack().isPlayingNow = false
             updateNotification()
         }
         Log.d(ChooseFolderActivity.TAG, "Music stopped")

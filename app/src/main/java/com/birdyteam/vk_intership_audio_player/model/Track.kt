@@ -15,6 +15,7 @@ class Track(context: Context,file : DocumentFile) {
     var albumImage : Bitmap? = null
     var duration : Long = 0
     var uri = file.uri
+    var isPlayingNow = false
 
     init {
         val metadataRetriever = MediaMetadataRetriever()
