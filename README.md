@@ -1,5 +1,5 @@
-# VK Internship Android 2018
-## Simple Audio Player which is able to play music from an Android device
+# VK Internship Android 2019
+## Simple Audio Player which can play music from an Android device
 Features:
 
 1. You have an opportunity to choose a folder which player picks to play mp3's from
