@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import android.view.View
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import com.birdyteam.vk_intership_audio_player.R
 import com.birdyteam.vk_intership_audio_player.controller.ChooseFolderActivity
 import com.birdyteam.vk_intership_audio_player.controller.MiniPlayer
-import kotlinx.android.synthetic.main.activity_choose_folder.view.*
 
 @SuppressLint("StaticFieldLeak")
 class TaskLoadingFiles(private val context: Context, private val fragmentManager: FragmentManager) :
@@ -39,9 +39,8 @@ class TaskLoadingFiles(private val context: Context, private val fragmentManager
             " tracks in Singleton"
         )
         if(singleton.size() > 0) {
-            fragmentManager.beginTransaction()
-                .add(R.id.FragmentContainer, MiniPlayer())
-                .commit()
+            val fragment = MiniPlayer()
+            fragment.addFragmentAnimation(context, fragmentManager, View.VISIBLE)
             context.startService(
                 MusicService.getInstance(context, Command.UPDATE_NOTIFICATION)
             )
