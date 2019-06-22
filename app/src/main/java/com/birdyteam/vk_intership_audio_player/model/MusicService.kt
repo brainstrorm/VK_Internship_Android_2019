@@ -269,8 +269,11 @@ class MusicService : Service() {
         Log.d(ChooseFolderActivity.TAG, "nextTrack called with startPlay = $startPlay")
         createPlayer(trackSingleton.nextTrack())
         sendBroadcast(Intent(UPDATE_INFO))
-        if(startPlay == true)
+        if(startPlay == true) {
             mediaPlayer?.start()
+            if(mediaPlayer?.isPlaying == true)
+                trackSingleton.getCurrentTrack().isPlayingNow = true
+        }
         updateNotification()
     }
 
