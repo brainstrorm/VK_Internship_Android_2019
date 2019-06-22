@@ -9,10 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.birdyteam.vk_intership_audio_player.R
 import com.birdyteam.vk_intership_audio_player.model.Command
 import com.birdyteam.vk_intership_audio_player.model.MusicService
@@ -20,19 +24,21 @@ import com.birdyteam.vk_intership_audio_player.model.Track
 import com.birdyteam.vk_intership_audio_player.model.TrackSingleton
 import java.lang.Exception
 
-class MiniPlayer : Fragment() {
+class MiniPlayer : AnimatedFragment() {
 
     companion object {
         private const val SAVE_PLAYING = "save.playing.state"
     }
 
+    override lateinit var animation: Animation
+    override var startAnimation = false
     private var isPlaying = false
     private lateinit var playBtn : ImageButton
     private lateinit var nextBtn : ImageButton
     private lateinit var albumImage : ImageView
     private lateinit var trackName : TextView
     private lateinit var duration : TextView
-    private lateinit var mView : View
+    override lateinit var mView : View
     private lateinit var track: Track
     private val receiverForSwapPause = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -93,6 +99,8 @@ class MiniPlayer : Fragment() {
         }
 
         updateInfoOnView()
+        if(startAnimation)
+            mView.startAnimation(animation)
         return mView
     }
 

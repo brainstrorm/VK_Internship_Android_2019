@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
-import android.util.Log
 import androidx.documentfile.provider.DocumentFile
-import com.birdyteam.vk_intership_audio_player.controller.ChooseFolderActivity
 
 class Track(context: Context,file : DocumentFile) {
 

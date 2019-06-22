@@ -128,23 +128,18 @@ class ChooseFolderActivity : AppCompatActivity() {
 
     fun swapFragments() {
         val fm = supportFragmentManager
-        when (fm.findFragmentById(R.id.FragmentContainer)) {
+        when (val fragment = fm.findFragmentById(R.id.FragmentContainer)) {
             is MiniPlayer -> {
                 setInfoVisibility(View.GONE)
-                fm.beginTransaction()
-                    .replace(R.id.FragmentContainer, MainPlayer())
-                    .commit()
+                fragment.replaceFragments(MainPlayer())
             }
             is MainPlayer -> {
-                setInfoVisibility(View.VISIBLE)
-                fm.beginTransaction()
-                    .replace(R.id.FragmentContainer, MiniPlayer())
-                    .commit()
+                fragment.replaceFragments(MiniPlayer())
             }
         }
     }
 
-    private fun setInfoVisibility(visibility : Int) {
+    fun setInfoVisibility(visibility : Int) {
         chooseFolderBtn.visibility = visibility
         boldText.visibility = visibility
         simpleText.visibility = visibility
